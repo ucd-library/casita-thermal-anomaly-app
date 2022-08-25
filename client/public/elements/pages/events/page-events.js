@@ -1,14 +1,13 @@
 import { LitElement } from 'lit';
 import {render, styles} from "./page-events.tpl.js";
 import "@ucd-lib/cork-app-utils";
-// import '../../../src/models/EventsModel'
 
 export default class PageEvents extends Mixin(LitElement)
   .with(LitCorkUtils) {
 
   static get properties() {
     return {
-      
+      events: {type: Array},
     }
   }
 
@@ -19,6 +18,7 @@ export default class PageEvents extends Mixin(LitElement)
   constructor() {
     super();
 
+    this.events = [];
     this._injectModel('EventsModel');
     this.publicVapidKey = 'BDS8gmFNhDJuS_HDfHZZaKV_sb9DA0Yyp3RVUp4rxPPFH2OURoBao5OYhPFc-cMM3sUF-a4UbBtCrJx64p1kc5o';    
 
@@ -36,16 +36,20 @@ export default class PageEvents extends Mixin(LitElement)
 
   /**
    * @method _onUpdateEvents
-   * @description bound to AppStateModel app-state-update event
+   * @description bound to EventsService update-events event
    *
    * @param {Object} e
    */
-   async _onUpdateEvents(e) {
-    debugger;
-    console.log('_onUpdateEvents', e);
-
+  async _onUpdateEvents(e) {
+    // TODO format datetime more elegantly, possibly display other data in list depending on Kimmy's designs
+    this.events = e.payload;
   }
 
+  /**
+   * @method _initPushSub
+   * @description adds an event listener to subscribe to push notifications
+   *
+   */
   _initPushSub() {
     const initPush = this.shadowRoot.querySelector('.init-push');
     if (initPush) {
@@ -56,7 +60,7 @@ export default class PageEvents extends Mixin(LitElement)
           // need to save this 'subscription' PushSubscription body to the db.. this is how we know where to send push notifications on the server side
           const subscription = await register.pushManager.subscribe({
             userVisibleOnly: true,
-            applicationServerKey: this.urlBase64ToUint8Array(this.publicVapidKey),
+            applicationServerKey: this._urlBase64ToUint8Array(this.publicVapidKey),
           });
           console.log(JSON.stringify(subscription));
   
@@ -74,7 +78,13 @@ export default class PageEvents extends Mixin(LitElement)
     }
   }
 
-  urlBase64ToUint8Array(base64String) {
+  /**
+   * @method _urlBase64ToUint8Array
+   * @description string encoder
+   *
+   * @param {string} base64String
+   */
+  _urlBase64ToUint8Array(base64String) {
     const padding = '='.repeat((4 - base64String.length % 4) % 4);
     const base64 = (base64String + padding)
       .replace(/-/g, '+')

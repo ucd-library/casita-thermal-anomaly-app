@@ -5,9 +5,7 @@ class EventsStore extends BaseStore {
   constructor() {
     super();
 
-    this.data = {
-      byEventId: {},
-    };
+    this.data = {};
 
     this.events = {
       UPDATE_EVENTS: 'update-events'
@@ -15,12 +13,12 @@ class EventsStore extends BaseStore {
   }
 
   // promise is the request promise
-  setEventsLoading(id, request) {
-    this._updateEvents({state: this.STATE.LOADING, id, request });
+  setEventsLoading(request) {
+    this._updateEvents({state: this.STATE.LOADING, request });
   }
 
-  setEventsLoaded(id, payload) {
-    this._updateEvents({state: this.STATE.LOADED, id, payload });
+  setEventsLoaded(payload) {
+    this._updateEvents({state: this.STATE.LOADED, payload });
   }
 
   setEventsError(err) {
@@ -29,14 +27,11 @@ class EventsStore extends BaseStore {
   
   // set data state and fire event if LOADED
   _updateEvents(data) {
+    debugger;
     // new state is same as old state, just quit out
     if( !this.stateChanged(this.data, data) ) return;
-    
-    debugger;
-    // TODO not sure on byEventId..
-    // would we save each event and loop over them before deciding to update data again?
 
-    this.data.byEventId[data.id] = data;
+    this.data = data;
     if (data && data.payload) {
       this.emit(this.events.UPDATE_EVENTS, this.data);
     }

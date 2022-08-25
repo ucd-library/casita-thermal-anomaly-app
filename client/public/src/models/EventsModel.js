@@ -15,25 +15,19 @@ class EventsModel extends BaseModel {
 
   /**
    * @method get
-   * @description Fetch data with EventsService, might already be cached in store
+   * @description Fetch data with EventsService
    * @returns {Promise}
    */
-   async get(id) {
+   async get() {
     // get current state
-    let state = this.store.data.byEventId[id];
-    debugger;
     try {
-      if( state && state.request ) {
-        // await promise request
-        await state.request;
-      } else {
-        // or call the service / api if not in the store already
-        await this.service.get(id);
-      }
+      // call the service / api, this is more of a search
+      await this.service.get();
     } catch (error) {
       // error is recorded in store
     }
-    return this.store.data.byEventId[id];
+    debugger;
+    return this.store.data;
   }
 
 }

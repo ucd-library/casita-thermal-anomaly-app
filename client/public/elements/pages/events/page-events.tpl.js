@@ -26,10 +26,11 @@ return html`
   <p><button class="btn btn--sm init-push">Subscribe to notifications</button></p>
   <h4>List of events / fires current / prior</h4>
   <ul class="list--arrow">
-    <li>
-      <a href="/eventDetail/42">8/25 10am</a>
-      <br>More things about it...
-    </li>
+
+    ${this.events.map(event => html`
+      <li role="none">
+        <a href="/eventDetails/${event.thermal_anomaly_event_id}" role="menuitem" data-event-id=${event.thermal_anomaly_event_id}>${event.created}</a>
+      </li>`)}
     
   </ul>
 `;}
