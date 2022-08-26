@@ -1,4 +1,5 @@
 let config = {
-    appRoutes: [ '/events', '/eventDetail', '/events/42/details' ]
+    appRoutes: window.APP_CONFIG.appRoutes,
+    publicVapidKey: window.APP_CONFIG.publicVapidKey
 }
 export default config;

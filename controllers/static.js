@@ -1,12 +1,11 @@
-const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const spaMiddleware = require('@ucd-lib/spa-router-middleware');
-const config = { appRoutes: [ '/', 'events', 'eventDetail' ] };
+const config = require('../lib/config');
 
 module.exports = (app) => {
   // path to your spa assets dir
-  let assetsDir = path.join(__dirname, 'client', 'public');
+  let assetsDir = path.join(__dirname, '../', 'client', 'public');
 
   /**
    * Setup SPA app routes
@@ -35,24 +34,14 @@ module.exports = (app) => {
     enable404 : false,
 
     getConfig : async (req, res, next) => {
-    //   let user;
-    //   if( req.session.user ) {
-    //     user = {
-    //       loggedIn : true,
-    //       username : req.session.user
-    //     };
-    //   } else {
-    //     user = {loggedIn: false};
-    //   }
-
       next({
-        // user : user,
-        appRoutes : config.appRoutes
+        appRoutes : config.appRoutes,
+        publicVapidKey : config.publicVapidKey
       });
     },
     
     template : (req, res, next) => {
-      next({title: 'Casita Thermal Anomaly App'});
+      next({title: config.title});
     }
   });
 

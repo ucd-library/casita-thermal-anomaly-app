@@ -8,6 +8,7 @@ export default class AppRoot extends Mixin(LitElement)
 
   static get properties() {
     return {
+      appRoutes : {type: Array},
       page: { type: String },
       navLinks: {type: Array},
     }
@@ -28,7 +29,7 @@ export default class AppRoot extends Mixin(LitElement)
     
     this.navLinks = [
       {text: 'Events', page: 'events', href: '/', type: 'events'},
-      {text: 'Event Detail', page: 'eventDetail', href: '/eventDetail', type: 'eventDetail'},
+      {text: 'Event Detail', page: 'event-detail', href: '/event-detail', type: 'event-detail'},
     ];
 
     this.render = render.bind(this);

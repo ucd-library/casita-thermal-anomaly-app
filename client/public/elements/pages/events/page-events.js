@@ -1,6 +1,7 @@
 import { LitElement } from 'lit';
 import {render, styles} from "./page-events.tpl.js";
 import "@ucd-lib/cork-app-utils";
+import config from '../../../src/config.js';
 
 export default class PageEvents extends Mixin(LitElement)
   .with(LitCorkUtils) {
@@ -20,7 +21,7 @@ export default class PageEvents extends Mixin(LitElement)
 
     this.events = [];
     this._injectModel('EventsModel');
-    this.publicVapidKey = 'BD48qfCALcPw4pw_p98kJ9kKGZBGIZ2Iq7ywMtdL23DMU6EbKL3qdERSNouGrWl25oFXlUNZ_4H2nt9QOA9U6VQ';
+    this.publicVapidKey = APP_CONFIG.publicVapidKey;
 
     this.render = render.bind(this);
   }

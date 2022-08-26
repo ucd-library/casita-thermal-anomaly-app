@@ -63,7 +63,7 @@ export default class LeafMap extends LitElement {
         alt: altText,
         interactive: true
     }).addTo(map);
-    // debugger;
+    
     imageOverlay.addEventListener('click', (leafletEvent) => {
       // see https://stackoverflow.com/a/42111623/1071630
       var e = leafletEvent.originalEvent;
