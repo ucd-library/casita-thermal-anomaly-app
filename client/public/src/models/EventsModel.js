@@ -26,7 +26,6 @@ class EventsModel extends BaseModel {
     } catch (error) {
       // error is recorded in store
     }
-    debugger;
     return this.store.data;
   }
 

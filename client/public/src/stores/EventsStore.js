@@ -27,7 +27,6 @@ class EventsStore extends BaseStore {
   
   // set data state and fire event if LOADED
   _updateEvents(data) {
-    debugger;
     // new state is same as old state, just quit out
     if( !this.stateChanged(this.data, data) ) return;
 

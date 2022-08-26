@@ -20,7 +20,7 @@ export default class PageEvents extends Mixin(LitElement)
 
     this.events = [];
     this._injectModel('EventsModel');
-    this.publicVapidKey = 'BDS8gmFNhDJuS_HDfHZZaKV_sb9DA0Yyp3RVUp4rxPPFH2OURoBao5OYhPFc-cMM3sUF-a4UbBtCrJx64p1kc5o';    
+    this.publicVapidKey = 'BD48qfCALcPw4pw_p98kJ9kKGZBGIZ2Iq7ywMtdL23DMU6EbKL3qdERSNouGrWl25oFXlUNZ_4H2nt9QOA9U6VQ';
 
     this.render = render.bind(this);
   }
