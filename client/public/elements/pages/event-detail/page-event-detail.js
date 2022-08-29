@@ -29,12 +29,15 @@ export default class PageEventDetail extends Mixin(LitElement)
   }
 
   /**
-   * @method firstUpdated
-   * @description Lit method called when element is first updated.
+   * @method updated
+   * @description lit-element updated method
+   * 
+   * @param {Object} props 
    */
-  async firstUpdated() {
-    this.eventId = 34; // TODO get from previous page link
-    const eventDetail = await this.EventDetailModel.get(this.eventId);
+  async updated(props) {
+    if( this.eventId ) {
+      await this.EventDetailModel.get(this.eventId);
+    }
   }
 
   /**

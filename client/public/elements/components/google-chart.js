@@ -49,8 +49,7 @@ export default class GoogleChart extends Mixin(LitElement)
    * 
    * @param {Object} props 
    */
-   async updated(props) {
-    debugger;
+  async updated(props) {
     if( this.eventFeatures.length > 0 ) {
       this._drawChart();
     } else if( this.eventDetail && Object.keys(this.eventDetail).length > 0 ) {

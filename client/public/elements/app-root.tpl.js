@@ -49,7 +49,7 @@ return html`
     </div>
 
     <div id="event-detail" class="category-brand--tahoe category-brand__background">
-      <page-event-detail></page-event-detail>
+      <page-event-detail .eventId=${this.eventId}></page-event-detail>
     </div>
 
   </ucdlib-pages>

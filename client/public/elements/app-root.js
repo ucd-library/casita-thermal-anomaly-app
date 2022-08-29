@@ -11,6 +11,7 @@ export default class AppRoot extends Mixin(LitElement)
       appRoutes : {type: Array},
       page: { type: String },
       navLinks: {type: Array},
+      eventId: {type: Number}
     }
   }
 
@@ -35,34 +36,6 @@ export default class AppRoot extends Mixin(LitElement)
     this.render = render.bind(this);
   }
 
-  connectedCallback() {
-    super.connectedCallback();    
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    // const initPush = this.shadowRoot.querySelector('.init-push');
-    // if (initPush) {
-    //   initPush.removeEventListener('click', this._initPushSub);
-    // }
-  }
-
-  /**
-   * @method firstUpdated
-   * @description Lit method called when element is first updated.
-   */
-  firstUpdated() {
-    // const initPush = this.shadowRoot.querySelector('.init-push');
-    // if (initPush) {
-      // initPush.addEventListener('click', this._initPushSub);
-    // }
-
-  }
-
-  _onLinkClick(link) {
-    console.log(link)
-  }
-
   /**
    * @method _onAppStateUpdate
    * @description bound to AppStateModel app-state-update event
@@ -70,17 +43,15 @@ export default class AppRoot extends Mixin(LitElement)
    * @param {Object} e
    */
   async _onAppStateUpdate(e) {
-    console.log('_onAppStateUpdate', e);
-
     let page = e.page;
     if( this.page === page ) return;
     this.page = page;
 
+    this.eventId = Number(e.location.path.slice(-1)[0]);
+
     window.scrollTo(0, 0);
     this.firstAppStateUpdate = false;
   }
-
-  
 
 }
 
