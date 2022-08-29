@@ -23,14 +23,6 @@ export default class LeafMap extends LitElement {
     this._initMap();
   }
 
-  /**
-   * @method firstUpdated
-   * @description Lit method called when element is first updated.
-   */
-  firstUpdated() {
-    // 
-  }
-
   _initMap() {
     const mapdiv = document.createElement('div');
     mapdiv.setAttribute('id', 'map');
@@ -63,7 +55,7 @@ export default class LeafMap extends LitElement {
         alt: altText,
         interactive: true
     }).addTo(map);
-    
+
     imageOverlay.addEventListener('click', (leafletEvent) => {
       // see https://stackoverflow.com/a/42111623/1071630
       var e = leafletEvent.originalEvent;

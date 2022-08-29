@@ -84,25 +84,33 @@ export default class GoogleChart extends Mixin(LitElement)
         'DateTime', 'Current Value', 'Hourly Max', '10 Day Max Average', '10 Day Max StdDev', `Threshold: avg+(stddev*${pixelData.properties.classifier})`, '10 Day Min Average', '10 Day Average'
       ]);
 
+      const currentValue = pixelData.properties.value;
+      let hourlyMax, tenDayMax, tenDayMin, tenDayAvg, tenDayStdDev, threshold;
+
       for( const hist in pixelData.properties.history ) {
         const dateTime = FormatUtils.formatDate(hist, true); // key 'hist' is a datetime string
         const histValues = pixelData.properties.history[hist];
-        const currentValue = pixelData.properties.value;
-        const hourlyMax = histValues['hourly-max'];
-        const tenDayMax = histValues['10d-max'];
-        const tenDayMin = histValues['10d-min'];
-        const tenDayAvg = histValues['10d-average'];
-        let tenDayStdDev = histValues['10d-stddev'];
+        hourlyMax = histValues['hourly-max'];
+        tenDayMax = histValues['10d-max'];
+        tenDayMin = histValues['10d-min'];
+        tenDayAvg = histValues['10d-average'];
+        tenDayStdDev = histValues['10d-stddev'];
         if (tenDayStdDev && tenDayStdDev < 100) {
           tenDayStdDev = 100;
         } 
-        const threshold = Number(tenDayAvg) + (Number(tenDayStdDev) * pixelData.properties.classifier);
+        threshold = Number(tenDayAvg) + (Number(tenDayStdDev) * pixelData.properties.classifier);
 
         data.push([
           dateTime, currentValue, hourlyMax, tenDayMax, tenDayStdDev, threshold, tenDayMin, tenDayAvg
         ]);
       }
-
+      debugger;
+      if (Number(hourlyMax) < Number(currentValue)) {
+        hourlyMax = currentValue;
+        data.push([
+          FormatUtils.formatDate(new Date().toJSON(), true), currentValue, hourlyMax, tenDayMax, tenDayStdDev, threshold, tenDayMin, tenDayAvg
+        ]);
+      }
       const googleData = google.visualization.arrayToDataTable(data);
 
       const options = {
