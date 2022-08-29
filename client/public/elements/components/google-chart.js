@@ -1,11 +1,14 @@
 import { LitElement } from 'lit';
 import {render, styles} from "./google-chart.tpl.js";
-
-export default class GoogleChart extends LitElement {
+import FormatUtils from '../../src/lib/format-utils';
+export default class GoogleChart extends Mixin(LitElement)
+  .with(LitCorkUtils) {
 
   static get properties() {
     return {
-      eventfeatures: {type: Object},
+      eventId: {type: Number},
+      eventDetail: {type: Object},
+      eventfeatures: {type: Array},
     }
   }
 
@@ -15,48 +18,115 @@ export default class GoogleChart extends LitElement {
 
   constructor() {
     super();
-    this.eventfeatures = {};
+
+    this._injectModel('EventDetailModel', 'EventFeaturesModel');
+    this.eventDetail = {};
+    this.eventFeatures = [];
+    this.eventId = 0;
+
     this.render = render.bind(this);
   }
 
   connectedCallback() {
     super.connectedCallback();
     this._initChart();
-    debugger;
   }
 
   /**
    * @method firstUpdated
    * @description Lit method called when element is first updated.
    */
-  firstUpdated() {
-    debugger;
-    
+  async firstUpdated() {
+    // this.eventId = 34; // TODO get from previous page link
+    // if (this.eventDetail) {
+    //   const eventFeatures = await this.EventFeaturesModel.get(this.eventDetail);
+    // }
   }
 
+  /**
+   * @method updated
+   * @description lit-element updated method
+   * 
+   * @param {Object} props 
+   */
+   async updated(props) {
+    debugger;
+    if( this.eventFeatures.length > 0 ) {
+      this._drawChart();
+    } else if( this.eventDetail && Object.keys(this.eventDetail).length > 0 ) {
+      this.eventId = this.eventDetail.id;
+      await this.EventFeaturesModel.get(this.eventDetail);
+    } 
+  }
+
+  /**
+   * @method _initChart
+   * @description setup for google chart and binding the draw function to google's onload callback
+   *
+   */
   _initChart() {
     google.charts.load('current', {'packages':['corechart']});
     google.charts.setOnLoadCallback(this._drawChart.bind(this));
   }
 
+  /**
+   * @method _drawChart
+   * @description callback for google chart onload to plot the chart data
+   *
+   */
   _drawChart() {
-    const data = google.visualization.arrayToDataTable([
-      ['DateTime', 'Current Value', 'Hourly Max', '10 Day Max Average', '10 Day Max StdDev'],
-      ['9/1 @ 19',  212, 660, 222, 132],
-      ['9/2 @ 6',   200, 620, 123, 456],
-      ['9/2 @ 19',  440, 1024, 789, 1022],
-      ['9/3 @ 6',   423, 1040, 321, 523]
-    ]);
+    if( this.eventFeatures.length > 0 ) {
+      // not sure if we need to target a single thermal_anomaly_event_px_id, get with Justin, for now plot with a single pixels data
+      const pixelData = this.eventFeatures[0];
+      const data = [];
 
-    const options = {
-      title: 'conus',
-      curveType: 'function',
-      legend: { position: 'bottom' }
-    };
+      // header data
+      data.push([
+        'DateTime', 'Current Value', 'Hourly Max', '10 Day Max Average', '10 Day Max StdDev', `Threshold: avg+(stddev*${pixelData.properties.classifier})`, '10 Day Min Average', '10 Day Average'
+      ]);
 
-    const chart = new google.visualization.LineChart(this.shadowRoot.querySelector('#chart'));
+      for( const hist in pixelData.properties.history ) {
+        const dateTime = FormatUtils.formatDate(hist, true); // key 'hist' is a datetime string
+        const histValues = pixelData.properties.history[hist];
+        const currentValue = pixelData.properties.value;
+        const hourlyMax = histValues['hourly-max'];
+        const tenDayMax = histValues['10d-max'];
+        const tenDayMin = histValues['10d-min'];
+        const tenDayAvg = histValues['10d-average'];
+        let tenDayStdDev = histValues['10d-stddev'];
+        if (tenDayStdDev && tenDayStdDev < 100) {
+          tenDayStdDev = 100;
+        } 
+        const threshold = Number(tenDayAvg) + (Number(tenDayStdDev) * pixelData.properties.classifier);
 
-    chart.draw(data, options);
+        data.push([
+          dateTime, currentValue, hourlyMax, tenDayMax, tenDayStdDev, threshold, tenDayMin, tenDayAvg
+        ]);
+      }
+
+      const googleData = google.visualization.arrayToDataTable(data);
+
+      const options = {
+        title: 'conus',
+        curveType: 'function',
+        legend: { position: 'bottom' }
+      };
+
+      const chart = new google.visualization.LineChart(this.shadowRoot.querySelector('#chart'));
+
+      chart.draw(googleData, options);
+    }    
+  }
+
+  /**
+   * @method _onUpdateEventFeatures
+   * @description bound to EventFeaturesService update-event-features event
+   *
+   * @param {Object} e
+   */
+  async _onUpdateEventFeatures(e) {
+    this.eventFeatures = e.byEventId[this.eventId].payload.features;
+    this.requestUpdate();
   }
 }
 

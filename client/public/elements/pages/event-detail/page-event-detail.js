@@ -8,7 +8,6 @@ export default class PageEventDetail extends Mixin(LitElement)
     return {
       eventId: {type: Number},
       eventDetail: {type: Object},
-      eventfeatures: {type: Object},
     }
   }
 
@@ -19,16 +18,14 @@ export default class PageEventDetail extends Mixin(LitElement)
   constructor() {
     super();
 
-    this._injectModel('EventDetailModel', 'EventFeaturesModel');
+    this._injectModel('EventDetailModel');
     this.eventDetail = {};
-    this.eventFeatures = {};
     this.eventId = 0;
     this.render = render.bind(this);
   }
 
   connectedCallback() {
     super.connectedCallback();
-    debugger;
   }
 
   /**
@@ -38,7 +35,6 @@ export default class PageEventDetail extends Mixin(LitElement)
   async firstUpdated() {
     this.eventId = 34; // TODO get from previous page link
     const eventDetail = await this.EventDetailModel.get(this.eventId);
-    const eventFeatures = await this.EventFeaturesModel.get(eventDetail);
   }
 
   /**
@@ -48,18 +44,7 @@ export default class PageEventDetail extends Mixin(LitElement)
    * @param {Object} e
    */
   async _onUpdateEventDetail(e) {
-    this.eventDetail = e.payload;
-  }
-
-  /**
-   * @method _onUpdateEventFeatures
-   * @description bound to EventFeaturesService update-event-features event
-   *
-   * @param {Object} e
-   */
-  async _onUpdateEventFeatures(e) {
-    console.log('in _onUpdateEventFeatures woot');
-    this.eventFeatures = e.byEventId[this.eventId].payload;
+    this.eventDetail = Object.values(e.byEventId)[0];
   }
 
 }

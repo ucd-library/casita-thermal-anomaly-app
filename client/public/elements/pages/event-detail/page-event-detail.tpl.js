@@ -18,5 +18,5 @@ export function render() {
 return html`
   <leaf-map></leaf-map>
 
-  <google-chart .eventfeatures=${this.eventFeatures}></google-chart>
+  <google-chart .eventDetail=${this.eventDetail}></google-chart>
 `;}

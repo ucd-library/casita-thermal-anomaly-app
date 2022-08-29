@@ -42,8 +42,6 @@ export default class PageEvents extends Mixin(LitElement)
    * @param {Object} e
    */
   async _onUpdateEvents(e) {
-    // TODO format datetime more elegantly, possibly display other data in list depending on Kimmy's designs
-    debugger;
     this.events = e.payload;
   }
 
@@ -100,18 +98,6 @@ export default class PageEvents extends Mixin(LitElement)
     }
     return outputArray;
   }
-
-  /**
-   * @method _formatDate
-   * @description format datetime string
-   *
-   * @param {string} datetime
-   */
-  _formatDate(datetime) {
-    const date = new Date(datetime);
-    return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()} ${datetime.split('T')[1].split('.')[0]}`;
-  }
-
 }
 
 customElements.define('page-events', PageEvents);
