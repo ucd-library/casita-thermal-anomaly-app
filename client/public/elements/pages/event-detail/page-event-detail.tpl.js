@@ -17,6 +17,6 @@ export function styles() {
 export function render() { 
 return html`
   <leaf-map></leaf-map>
-  <!-- <hr> -->
-  <google-chart></google-chart>
+
+  <google-chart .eventfeatures=${this.eventFeatures}></google-chart>
 `;}

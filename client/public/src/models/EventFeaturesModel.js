@@ -19,9 +19,9 @@ class EventFeaturesModel extends BaseModel {
    *
    * @returns {Promise}
    */
-   async get(id) {
+   async get(event) {
     // get current state
-    let state = this.store.data.byEventId[id];
+    let state = this.store.data.byEventId[event.id];
 
     try {
       if( state && state.request ) {
@@ -29,12 +29,12 @@ class EventFeaturesModel extends BaseModel {
         await state.request;
       } else {
         // or call the service / api if not in the store already
-        await this.service.get(id);
+        await this.service.get(event);
       }
     } catch (error) {
       // error is recorded in store
     }
-    return this.store.data.byEventId[id];
+    return this.store.data.byEventId[event.id];
   }
 
 }

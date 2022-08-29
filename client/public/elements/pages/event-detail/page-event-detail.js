@@ -6,9 +6,9 @@ export default class PageEventDetail extends Mixin(LitElement)
   
   static get properties() {
     return {
+      eventId: {type: Number},
       eventDetail: {type: Object},
       eventfeatures: {type: Object},
-      
     }
   }
 
@@ -22,8 +22,13 @@ export default class PageEventDetail extends Mixin(LitElement)
     this._injectModel('EventDetailModel', 'EventFeaturesModel');
     this.eventDetail = {};
     this.eventFeatures = {};
-
+    this.eventId = 0;
     this.render = render.bind(this);
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    debugger;
   }
 
   /**
@@ -31,7 +36,8 @@ export default class PageEventDetail extends Mixin(LitElement)
    * @description Lit method called when element is first updated.
    */
   async firstUpdated() {
-    const eventDetail = await this.EventDetailModel.get(34);
+    this.eventId = 34; // TODO get from previous page link
+    const eventDetail = await this.EventDetailModel.get(this.eventId);
     const eventFeatures = await this.EventFeaturesModel.get(eventDetail);
   }
 
@@ -42,9 +48,7 @@ export default class PageEventDetail extends Mixin(LitElement)
    * @param {Object} e
    */
   async _onUpdateEventDetail(e) {
-    // TODO format datetime more elegantly, possibly display other data in list depending on Kimmy's designs
     this.eventDetail = e.payload;
-    console.log(e)
   }
 
   /**
@@ -54,9 +58,8 @@ export default class PageEventDetail extends Mixin(LitElement)
    * @param {Object} e
    */
   async _onUpdateEventFeatures(e) {
-    console.log('in _onUpdateEventFeatures woot')
-    this.eventDetail = e.payload;
-    console.log(e)
+    console.log('in _onUpdateEventFeatures woot');
+    this.eventFeatures = e.byEventId[this.eventId].payload;
   }
 
 }

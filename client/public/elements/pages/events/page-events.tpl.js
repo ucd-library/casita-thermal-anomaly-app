@@ -28,8 +28,8 @@ return html`
   <ul class="list--arrow">
 
     ${this.events.map(event => html`
-      <li role="none">
-        <a href="/eventDetails/${event.thermal_anomaly_event_id}" role="menuitem" data-event-id=${event.thermal_anomaly_event_id}>${event.created}</a>
+      <li role="none" style="cursor: pointer">
+        <a href="/event-details/${event.thermal_anomaly_event_id}" role="menuitem" data-event-id=${event.thermal_anomaly_event_id}>${this._formatDate(event.created)}</a>
       </li>`)}
     
   </ul>

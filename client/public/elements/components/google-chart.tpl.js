@@ -12,5 +12,6 @@ export function styles() {
 
 export function render() { 
 return html`
+  <div>${JSON.stringify(this.eventFeatures)}</div>
   <div id="chart" style="width: 900px; height: 500px"></div>
 `;}

@@ -1,11 +1,11 @@
 import {BaseService} from '@ucd-lib/cork-app-utils';
-import EventDetailStore from '../stores/EventDetailStore.js';
+import EventFeaturesStore from '../stores/EventFeaturesStore.js';
 
-class EventDetailService extends BaseService {
+class EventFeaturesService extends BaseService {
 
   constructor() {
     super();
-    this.store = EventDetailStore;
+    this.store = EventFeaturesStore;
   }
 
   /**
@@ -15,55 +15,18 @@ class EventDetailService extends BaseService {
    * @returns {Promise}
    */
   async get(event) {
-    /*
-    // with eventId, can request https://data.casita.library.ucdavis.edu/_/thermal-anomaly/event/34 for instance, which returns
-      thermal_anomaly_event_id: 34
-      created:"2022-08-24T16:06:17.000Z"
-      label:null
-      notes:null
-      satellite:"west"
-      product:"conus"
-      apid:"b6"
-      band:"7"
-      active:false
-      timestamps [2]
-        0
-        0:"timestamp"
-        1:"pixelCount"
-`
-        1
-        0:"2022-08-24T16:06:17.000Z"
-        1:"35"
-
-    // then can get the geojson file with by requesting https://data.casita.library.ucdavis.edu/west/thermal-anomaly/2022-08-24/16/06-17/7/b6/34-features.json
+    // get the geojson file with by requesting ie https://data.casita.library.ucdavis.edu/west/thermal-anomaly/2022-08-24/16/06-17/7/b6/34-features.json
     // the path being /[satellite]/thermal-anomaly/[date]/[hour]/[min-sec]/[band]/[apid]/[event-id]-features.json
-    */
-    const path = `${event.satellite}/thermal-anomaly/`; // TODO
-    console.log(event);
-    debugger;
-
-    /*
-    event : {
-      id: 34
-      payload:
-        active: false
-        apid: "b6"
-        band: "7"
-        created: "2022-08-24T16:06:17.000Z"
-        label: null
-        notes: null
-        product: "conus"
-        satellite: "west"
-        thermal_anomaly_event_id: 34
-        timestamps: (2) [Array(2), Array(2)]
-      [[Prototype]]: Object
-      state: "loaded"
-      [[Prototype]]: Object
-    }
-      */
+    const dateTime = event.payload.timestamps[1][0];
+    const date = dateTime.split('T')[0];
+    const time = dateTime.split('T')[1];
+    const hour = time.substr(0, 2);
+    const min = time.substr(3, 2);
+    const sec = time.substr(6, 2);
+    const path = `${event.payload.satellite}/thermal-anomaly/${date}/${hour}/${min}-${sec}/${event.payload.band}/${event.payload.apid}`;
 
     return this.request({
-      url : `https://data.casita.library.ucdavis.edu/${path}/${event.thermal_anomaly_event_id}-features.json`,
+      url : `https://data.casita.library.ucdavis.edu/${path}/${event.id}-features.json`,
       // optional
       fetchOptions : {
         credentials : 'omit'
@@ -71,15 +34,15 @@ class EventDetailService extends BaseService {
       // if the state is 'loading' and another request for this object
       // comes in, both requests will wait on the same promise preventing
       // two network requests for the same objects
-      checkCached : () => this.store.data.byEventId[id],
+      checkCached : () => this.store.data.byEventId[event.id],
       // request is a promise to resolves when network request finished (success or failure)
-      onLoading : request => this.store.setEventDetailLoading(id, request),
-      onLoad : result => this.store.setEventDetailLoaded(id, result.body),
-      onError : e => this.store.setEventDetailError(id, e)
+      onLoading : request => this.store.setEventFeaturesLoading(event.id, request),
+      onLoad : result => this.store.setEventFeaturesLoaded(event.id, result.body),
+      onError : e => this.store.setEventFeaturesError(event.id, e)
     });
   }
 
 }
 
-const service = new EventDetailService();
+const service = new EventFeaturesService();
 export default service;

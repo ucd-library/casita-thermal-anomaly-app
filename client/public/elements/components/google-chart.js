@@ -5,7 +5,7 @@ export default class GoogleChart extends LitElement {
 
   static get properties() {
     return {
-      
+      eventfeatures: {type: Object},
     }
   }
 
@@ -15,12 +15,23 @@ export default class GoogleChart extends LitElement {
 
   constructor() {
     super();
+    this.eventfeatures = {};
     this.render = render.bind(this);
   }
 
   connectedCallback() {
     super.connectedCallback();
     this._initChart();
+    debugger;
+  }
+
+  /**
+   * @method firstUpdated
+   * @description Lit method called when element is first updated.
+   */
+  firstUpdated() {
+    debugger;
+    
   }
 
   _initChart() {
