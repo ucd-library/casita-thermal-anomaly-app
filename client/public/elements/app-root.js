@@ -27,13 +27,20 @@ export default class AppRoot extends Mixin(LitElement)
     this._injectModel('AppStateModel');
     this.page = this.appRoutes[0];
 
-    
     this.navLinks = [
-      {text: 'Events', page: 'events', href: '/', type: 'events'},
+      {text: 'Events', page: '/', href: '/', type: 'events'},
+      {text: 'Event', page: 'event', href: '/event', type: 'event'},
       {text: 'Event Detail', page: 'event-detail', href: '/event-detail', type: 'event-detail'},
     ];
 
     this.render = render.bind(this);
+  }
+
+  _onShowDetails(e) {
+    console.log('hi');
+    this.page = 'event-detail';
+    this.requestUpdate();
+    // why isn't url getting updated
   }
 
   /**

@@ -1,9 +1,10 @@
 import { LitElement } from 'lit';
-import {render, styles} from "./page-event-detail.tpl.js";
+import {render, styles} from "./page-event.tpl.js";
+import "@ucd-lib/cork-app-utils";
 
-export default class PageEventDetail extends Mixin(LitElement)
+export default class PageEvent extends Mixin(LitElement)
   .with(LitCorkUtils) {
-  
+
   static get properties() {
     return {
       eventId: {type: Number},
@@ -17,11 +18,35 @@ export default class PageEventDetail extends Mixin(LitElement)
 
   constructor() {
     super();
-
+  
     this._injectModel('EventDetailModel');
     this.eventDetail = {};
-    this.eventId = 0;
+    this.eventId = 0;  
     this.render = render.bind(this);
+  }
+
+  // connectedCallback() {
+  //   super.connectedCallback();
+  // }
+
+  firstUpdated() {
+    // todo move up and see if bubbles
+    // let leafMap = this.shadowRoot.querySelector('leaf-map');
+    // debugger;
+    // if (leafMap && leafMap.shadowRoot) {
+    // this.addEventListener('show-detail-pixel', (e) => {
+    //   debugger;
+    // });
+    // }
+  }
+
+  _onShowDetails(e) {
+    // console.log('hi')
+    debugger;
+    this.dispatchEvent(new CustomEvent('show-detail-pixel', {
+      bubbles: true,
+      overlay: 42, // todo get from event?
+    }));
   }
 
   /**
@@ -48,4 +73,4 @@ export default class PageEventDetail extends Mixin(LitElement)
 
 }
 
-customElements.define('page-event-detail', PageEventDetail);
+customElements.define('page-event', PageEvent);

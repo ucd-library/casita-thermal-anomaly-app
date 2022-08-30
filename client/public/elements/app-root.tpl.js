@@ -48,6 +48,10 @@ return html`
       <page-events></page-events>
     </div>
 
+    <div id="event" class="category-brand--tahoe category-brand__background">
+      <page-event .eventId=${this.eventId} @show-detail-pixel="${(e) => { this._onShowDetails(e) }}"></page-event>
+    </div>
+
     <div id="event-detail" class="category-brand--tahoe category-brand__background">
       <page-event-detail .eventId=${this.eventId}></page-event-detail>
     </div>

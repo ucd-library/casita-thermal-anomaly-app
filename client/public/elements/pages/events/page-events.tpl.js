@@ -25,12 +25,12 @@ export function styles() {
 export function render() { 
 return html`
   <p><button class="btn btn--sm init-push">Subscribe to notifications</button></p>
-  <h4>List of events / fires current / prior</h4>
+  <h2>Recent Thermal Events</h2>
   <ul class="list--arrow">
 
     ${this.events.map(event => html`
       <li role="none" style="cursor: pointer">
-        <a href="/event-detail/${event.thermal_anomaly_event_id}" role="menuitem" data-event-id=${event.thermal_anomaly_event_id}>${FormatUtils.formatDate(event.created)}</a>
+        <a href="/event/${event.thermal_anomaly_event_id}" role="menuitem" data-event-id=${event.thermal_anomaly_event_id}>${FormatUtils.formatDate(event.created)}</a>
       </li>`)}
     
   </ul>

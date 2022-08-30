@@ -42,7 +42,8 @@ export default class PageEvents extends Mixin(LitElement)
    * @param {Object} e
    */
   async _onUpdateEvents(e) {
-    this.events = e.payload;
+    // sort newest on top
+    this.events = e.payload.sort((a,b) => new Date(a.created) > new Date(b.created)).reverse();
   }
 
   /**

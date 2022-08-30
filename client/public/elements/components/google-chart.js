@@ -33,17 +33,6 @@ export default class GoogleChart extends Mixin(LitElement)
   }
 
   /**
-   * @method firstUpdated
-   * @description Lit method called when element is first updated.
-   */
-  async firstUpdated() {
-    // this.eventId = 34; // TODO get from previous page link
-    // if (this.eventDetail) {
-    //   const eventFeatures = await this.EventFeaturesModel.get(this.eventDetail);
-    // }
-  }
-
-  /**
    * @method updated
    * @description lit-element updated method
    * 
@@ -104,7 +93,8 @@ export default class GoogleChart extends Mixin(LitElement)
           dateTime, currentValue, hourlyMax, tenDayMax, tenDayStdDev, threshold, tenDayMin, tenDayAvg
         ]);
       }
-      debugger;
+
+      // join hourlyMax with currentValue if less
       if (Number(hourlyMax) < Number(currentValue)) {
         hourlyMax = currentValue;
         data.push([

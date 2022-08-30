@@ -14,31 +14,7 @@ class EventDetailService extends BaseService {
    *
    * @returns {Promise}
    */
-  async get(id) {
-    /*
-    // with eventId, can request https://data.casita.library.ucdavis.edu/_/thermal-anomaly/event/34 for instance, which returns
-      thermal_anomaly_event_id: 34
-      created:"2022-08-24T16:06:17.000Z"
-      label:null
-      notes:null
-      satellite:"west"
-      product:"conus"
-      apid:"b6"
-      band:"7"
-      active:false
-      timestamps [2]
-        0
-        0:"timestamp"
-        1:"pixelCount"
-`
-        1
-        0:"2022-08-24T16:06:17.000Z"
-        1:"35"
-
-    // then can get the geojson file with by requesting https://data.casita.library.ucdavis.edu/west/thermal-anomaly/2022-08-24/16/06-17/7/b6/34-features.json
-    // the path being /[satellite]/thermal-anomaly/[date]/[hour]/[min-sec]/[band]/[apid]/[event-id]-features.json
-    */
-    
+  async get(id) {    
     return this.request({
       url : `https://data.casita.library.ucdavis.edu/_/thermal-anomaly/event/${id}`,
       // optional
