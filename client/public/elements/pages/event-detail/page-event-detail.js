@@ -44,6 +44,7 @@ export default class PageEventDetail extends Mixin(LitElement)
    */
   async _onUpdateEventDetail(e) {
     this.eventDetail = Object.values(e.byEventId)[0];
+    debugger;
   }
 
 }

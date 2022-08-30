@@ -47,6 +47,8 @@ export default class LeafMap extends LitElement {
         // todo parse overlay that was clicked to zoom in on particular pixel section?
         // we could get position if not in shadowDom, but some issues with click events getting through to shadow
 
+        // this will likely change depending on how many overlay images we're adding, need to chat more on that
+        // also we want to bubble the event up and not daisy-chain the event, for some reason it wasn't working though
         // then propogate event to change to detail view
         this.dispatchEvent(new CustomEvent('show-detail-pixel', {
           bubbles: true,
