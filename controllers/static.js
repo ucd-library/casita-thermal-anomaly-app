@@ -5,7 +5,8 @@ const config = require('../lib/config');
 
 module.exports = (app) => {
   // path to your spa assets dir
-  let assetsDir = path.join(__dirname, '../', 'client', 'public');
+  let assetsDir = path.join(__dirname, '..', 'client', config.client.dir);
+  console.log('Serving client env ('+config.client.env+') code from: '+assetsDir);
 
   /**
    * Setup SPA app routes

@@ -6,7 +6,6 @@ const bodyParser = require('body-parser');
 const controllers = require('./controllers/index.js');
 const config = require('./lib/config');
 const fs = require('fs');
-const path = require('path');
 const {SecretManagerServiceClient} = require('@google-cloud/secret-manager');
 
 const app = express();
@@ -31,7 +30,8 @@ async function loadLatestSecret(name) {
   return resp[0].payload.data.toString('utf-8');
 }
 
-app.listen(config.server.port, async () => {
+
+async function setupWebpush() {
   if( !config.publicVapidKey ) {
     let vapidKey = JSON.parse(await loadLatestSecret('thermal-anomaly-app-vapid-key'));
     fs.writeFileSync(path.join(__dirname, 'vapidKeys.json'), vapidKey);
@@ -42,7 +42,9 @@ app.listen(config.server.port, async () => {
   const publicVapidKey = config.publicVapidKey;
   const privateVapidKey = config.privateVapidKey;
   webPush.setVapidDetails('mailto:dcartwright@ucdavis.edu', publicVapidKey, privateVapidKey);
+}
 
-
+app.listen(config.server.port, async () => {
+  setupWebpush();
   console.log('server ready on port '+config.server.port);
 });

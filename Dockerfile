@@ -14,6 +14,7 @@ RUN npm install
 
 RUN mkdir -p client/public
 WORKDIR /app/client
+COPY client/dist.sh .
 COPY client/webpack-dist.config.js .
 COPY client/webpack-watch.config.js .
 
