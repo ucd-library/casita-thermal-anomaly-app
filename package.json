@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "cd client && webpack --config webpack-watch.config.js --watch",
-    "dist": "webpack --config webpack-dist.config.js",
+    "dist": "cd client && webpack --config webpack-dist.config.js",
     "dev": "nodemon index.js",
     "generate-keys": "if [[ ! -f vapidKeys.json ]]; then npx web-push generate-vapid-keys --json > vapidKeys.json; fi"
   },
@@ -23,7 +23,7 @@
   "devDependencies": {
     "@ucd-lib/cork-app-build": "^0.4.1",
     "nodemon": "^2.0.19",
-    "webpack": "^4.46.0",
+    "webpack": "^5.74.0",
     "webpack-cli": "^4.10.0"
   }
 }

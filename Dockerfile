@@ -13,15 +13,20 @@ COPY package-lock.json .
 RUN npm install
 
 RUN mkdir -p client/public
+WORKDIR /app/client
+COPY client/webpack-dist.config.js .
+COPY client/webpack-watch.config.js .
+
 WORKDIR /app/client/public
-COPY package.json .
-COPY package-lock.json .
+COPY client/public/package.json .
+COPY client/public/package-lock.json .
 RUN npm install
-COPY elements elements
-COPY img img
-COPY src src
-COPY index.html .
-COPY index.js .
+
+COPY client/public/elements elements
+COPY client/public/img img
+COPY client/public/src src
+COPY client/public/index.html .
+COPY client/public/index.js .
 
 WORKDIR /app
 RUN npm run dist
