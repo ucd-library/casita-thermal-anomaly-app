@@ -32,17 +32,14 @@ export default class PageEvent extends Mixin(LitElement)
   firstUpdated() {
     // todo move up and see if bubbles
     // let leafMap = this.shadowRoot.querySelector('leaf-map');
-    // debugger;
     // if (leafMap && leafMap.shadowRoot) {
     // this.addEventListener('show-detail-pixel', (e) => {
-    //   debugger;
+
     // });
     // }
   }
 
   _onShowDetails(e) {
-    // console.log('hi')
-    debugger;
     this.dispatchEvent(new CustomEvent('show-detail-pixel', {
       bubbles: true,
       overlay: 42, // todo get from event?

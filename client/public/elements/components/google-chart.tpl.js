@@ -12,5 +12,5 @@ export function styles() {
 
 export function render() { 
 return html`
-  <div id="chart" style="width: 2000px; height: 700px"></div>
+  <div id="chart" style="width: 1500px; height: 600px"></div>
 `;}
