@@ -23,6 +23,7 @@ class AppStateModelImpl extends AppStateModel {
   }
 
   set(update) {
+    debugger;
     if (update.location && !update.page) {
       if( this.firstLoad && this.store.data.page === '404' ) {
         update.page = '404';

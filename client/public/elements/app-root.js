@@ -36,13 +36,6 @@ export default class AppRoot extends Mixin(LitElement)
     this.render = render.bind(this);
   }
 
-  _onShowDetails(e) {
-    console.log('hi');
-    this.page = 'event-detail';
-    this.requestUpdate();
-    // why isn't url getting updated
-  }
-
   /**
    * @method _onAppStateUpdate
    * @description bound to AppStateModel app-state-update event

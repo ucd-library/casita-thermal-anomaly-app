@@ -39,13 +39,6 @@ export default class PageEvent extends Mixin(LitElement)
     // }
   }
 
-  _onShowDetails(e) {
-    this.dispatchEvent(new CustomEvent('show-detail-pixel', {
-      bubbles: true,
-      overlay: 42, // todo get from event?
-    }));
-  }
-
   /**
    * @method updated
    * @description lit-element updated method
