@@ -30,7 +30,12 @@ return html`
 
     ${this.events.map(event => html`
       <li role="none" style="cursor: pointer">
-        <a href="/event/${event.thermal_anomaly_event_id}" role="menuitem" data-event-id=${event.thermal_anomaly_event_id}>${FormatUtils.formatDate(event.created)}</a>
+        <a 
+          href="/event/${event.thermal_anomaly_event_id}" 
+          role="menuitem" 
+          data-event-id=${event.thermal_anomaly_event_id}>
+          #${event.thermal_anomaly_event_id} ${event.active ? '(Active)' : ''} ${FormatUtils.formatDate(event.created)}
+        </a>
       </li>`)}
     
   </ul>

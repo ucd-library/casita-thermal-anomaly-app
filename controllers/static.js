@@ -37,7 +37,9 @@ module.exports = (app) => {
     getConfig : async (req, res, next) => {
       next({
         appRoutes : config.appRoutes,
-        publicVapidKey : config.publicVapidKey
+        publicVapidKey : config.publicVapidKey,
+        dataHost : config.dataHost,
+        image : config.image
       });
     },
     

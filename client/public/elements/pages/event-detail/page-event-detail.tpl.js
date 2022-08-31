@@ -28,18 +28,18 @@ return html`
     ${this.eventDetail && this.eventDetail.payload ? html`
         <div>
           <div class="l-sibling-grid--half panel o-box">
-            <img src="https://data.casita.library.ucdavis.edu/${this.eventDetail.payload.satellite}/thermal-anomaly/${this.eventDetail.payload.created.substring(0, 10)}/${this.eventDetail.payload.created.substring(11, 13) - 1}/00-00/${this.eventDetail.payload.band}/${this.eventDetail.payload.apid}/blocks/1666-213/hourly-max-10d-average.png" alt="Image of hourly max 10 day average" />
+            <canvas-image src="${this.eventImages['hourly-max-10d-average.png']}" alt="Image of hourly max 10 day average" ></canvas-image>
           </div>
           <div class="l-sibling-grid--half panel o-box">
-            <img src="https://data.casita.library.ucdavis.edu/${this.eventDetail.payload.satellite}/thermal-anomaly/${this.eventDetail.payload.created.substring(0, 10)}/${this.eventDetail.payload.created.substring(11, 13) - 1}/00-00/${this.eventDetail.payload.band}/${this.eventDetail.payload.apid}/blocks/1666-213/hourly-max-10d-max.png" alt="Image of hourly max 10 day max" />
+            <canvas-image src="${this.eventImages['hourly-max-10d-max.png']}" alt="Image of hourly max 10 day max" ></canvas-image>
           </div>
         </div>
         <div>
           <div class="l-sibling-grid--half panel o-box">
-            <img src="https://data.casita.library.ucdavis.edu/${this.eventDetail.payload.satellite}/thermal-anomaly/${this.eventDetail.payload.created.substring(0, 10)}/${this.eventDetail.payload.created.substring(11, 13) - 1}/00-00/${this.eventDetail.payload.band}/${this.eventDetail.payload.apid}/blocks/1666-213/hourly-max-10d-stddev.png" alt="Image of hourly max 10 day standard deviation" />
+            <canvas-image src="${this.eventImages['hourly-max-10d-stddev.png']}" alt="Image of hourly max 10 day standard deviation" ></canvas-image>
           </div>
           <div class="l-sibling-grid--half panel o-box">
-            <img src="https://data.casita.library.ucdavis.edu/${this.eventDetail.payload.satellite}/thermal-anomaly/${this.eventDetail.payload.created.substring(0, 10)}/${this.eventDetail.payload.created.substring(11, 13) - 1}/00-00/${this.eventDetail.payload.band}/${this.eventDetail.payload.apid}/blocks/1666-213/hourly-max-10d-min.png" alt="Image of hourly max 10 day min" />
+            <canvas-image src="${this.eventImages['hourly-max.png']}" alt="Image of hourly max"></canvas-image>
           </div>
         </div>
       ` : ''}
