@@ -18,5 +18,5 @@ export function styles() {
 
 export function render() { 
 return html`
-  <leaf-map @show-detail-pixel="${(e) => { this._onShowDetails(e) }}"></leaf-map>
+  <leaf-map .eventId=${this.eventId}></leaf-map>
 `;}

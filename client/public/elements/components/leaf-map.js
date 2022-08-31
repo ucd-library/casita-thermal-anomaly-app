@@ -1,10 +1,12 @@
 import { LitElement } from 'lit';
 import {render, styles} from "./leaf-map.tpl.js";
 
-export default class LeafMap extends LitElement {
+export default class LeafMap extends Mixin(LitElement)
+  .with(LitCorkUtils) {
 
   static get properties() {
     return {
+      eventId: {type: Number},
       map: {type: Object},
       imageOverlay: {type: Object},
     }
@@ -16,6 +18,7 @@ export default class LeafMap extends LitElement {
 
   constructor() {
     super();
+    this._injectModel('AppStateModel');
     this.render = render.bind(this);
   }
 
@@ -50,10 +53,29 @@ export default class LeafMap extends LitElement {
         // this will likely change depending on how many overlay images we're adding, need to chat more on that
         // also we want to bubble the event up and not daisy-chain the event, for some reason it wasn't working though
         // then propogate event to change to detail view
-        this.dispatchEvent(new CustomEvent('show-detail-pixel', {
-          bubbles: true,
-          overlay: 42
-        }));
+
+        // this.dispatchEvent(new CustomEvent('show-detail-pixel', {
+        //   bubbles: true,
+        //   overlay: 42
+        // }));
+
+        /*
+        location:
+          fullpath: "/event-detail/42"
+          hash: ""
+          path: (2) ['event-detail', '42']
+          pathname: "/event-detail/42"
+          query: {}
+        */
+        this.AppStateModel.set({
+          location: {
+            fullpath: `/event-detail/${this.eventId}`,
+            hash: '',
+            path: ['event-detail', this.eventId],
+            pathname: `/event-detail/${this.eventId}`,
+            query: {}
+          }
+        });
       });
     }
   }
