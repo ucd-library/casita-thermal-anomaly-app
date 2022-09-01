@@ -67,15 +67,16 @@ export default class LeafMap extends Mixin(LitElement)
           pathname: "/event-detail/42"
           query: {}
         */
-        this.AppStateModel.set({
-          location: {
-            fullpath: `/event-detail/${this.eventId}`,
-            hash: '',
-            path: ['event-detail', this.eventId],
-            pathname: `/event-detail/${this.eventId}`,
-            query: {}
-          }
-        });
+
+        // this.AppStateModel.set({
+        //   location: {
+        //     fullpath: `/event-detail/${this.eventId}`,
+        //     hash: '',
+        //     path: ['event-detail', this.eventId],
+        //     pathname: `/event-detail/${this.eventId}`,
+        //     query: {}
+        //   }
+        // });
       });
     }
   }
