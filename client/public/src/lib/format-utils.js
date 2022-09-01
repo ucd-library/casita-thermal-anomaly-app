@@ -7,14 +7,23 @@ class FormatUtils {
    * @param {boolean} abbreviated
    */
   formatDate(datetime, abbreviated) {
-    const date = new Date(datetime);
+    if( typeof datetime === 'string' ) {
+      datetime = new Date(datetime);
+    }
+
     let formatted = '';
     if (abbreviated) {
-        formatted = `${date.getMonth() + 1}/${date.getDate()}@${datetime.split('T')[1].split(':')[0]}`; // MM/DD@HH
+        formatted = `${datetime.getMonth() + 1}/${datetime.getDate()}@${this.padLeft(datetime.getHours())}`; // MM/DD@HH
     } else {
-        formatted = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()} ${datetime.split('T')[1].split('.')[0]}`; // MM/DD/YYYY HH:MM:SS
+        formatted = `${datetime.getMonth() + 1}/${datetime.getDate()}/${datetime.getFullYear()} ${this.padLeft(datetime.getHours())}`; // MM/DD/YYYY HH:MM:SS
     }
     return formatted;
+  }
+
+  padLeft(val, count=2) {
+    val = val+'';
+    while( val.length < count ) val = '0'+val;
+    return val;
   }
 }
 

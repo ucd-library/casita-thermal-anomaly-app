@@ -70,42 +70,58 @@ export default class GoogleChart extends Mixin(LitElement)
 
       // header data
       data.push([
-        'DateTime', 'Current Value', 'Hourly Max', '10 Day Max Average', '10 Day Max StdDev', `Threshold: avg+(stddev*${pixelData.properties.classifier})`, '10 Day Min Average', '10 Day Average'
+        'DateTime', 'Current Value', 'Hourly Max',  '10 Day Average', '10 Day Max StdDev', `Threshold: avg+(stddev*${pixelData.properties.classifier})`,
       ]);
 
       const currentValue = pixelData.properties.value;
       let hourlyMax, tenDayMax, tenDayMin, tenDayAvg, tenDayStdDev, threshold;
 
-      for( const hist in pixelData.properties.history ) {
+      let timestamps = Object
+        .keys(pixelData.properties.history)
+        .map(timestamp => new Date(timestamp).getTime());
+
+      let currentTime = new Date(Math.min(...timestamps));
+      let endTime = new Date(Math.max(...timestamps));
+
+
+      // for( const hist in pixelData.properties.history ) {
+      while( currentTime.getTime() <= endTime.getTime() ) {
+        let hist = currentTime.toISOString();
+
         const dateTime = FormatUtils.formatDate(hist, true); // key 'hist' is a datetime string
-        const histValues = pixelData.properties.history[hist];
-        hourlyMax = histValues['hourly-max'];
-        tenDayMax = histValues['10d-max'];
-        tenDayMin = histValues['10d-min'];
-        tenDayAvg = histValues['10d-average'];
-        tenDayStdDev = histValues['10d-stddev'];
+        if( dateTime == '8/27@06' ) debugger;
+        const histValues = pixelData.properties.history[hist] || {};
+        hourlyMax = histValues['hourly-max'] || null;
+        tenDayMax = histValues['10d-max'] || null;
+        tenDayMin = histValues['10d-min'] || null;
+        tenDayAvg = histValues['10d-average'] || null;
+        tenDayStdDev = histValues['10d-stddev'] || null;
         if (tenDayStdDev && tenDayStdDev < 100) {
           tenDayStdDev = 100;
         } 
         threshold = Number(tenDayAvg) + (Number(tenDayStdDev) * pixelData.properties.classifier);
 
+        console.log(hist, dateTime, currentValue, hourlyMax, tenDayAvg, tenDayStdDev, threshold);
         data.push([
-          dateTime, currentValue, hourlyMax, tenDayMax, tenDayStdDev, threshold, tenDayMin, tenDayAvg
+          dateTime, currentValue, hourlyMax, tenDayAvg, tenDayStdDev, threshold
         ]);
+
+        currentTime.setTime(currentTime.getTime() + (1000*60*60));
       }
+      console.log(data);
 
       // join hourlyMax with currentValue if less
       if (Number(hourlyMax) < Number(currentValue)) {
         hourlyMax = currentValue;
         data.push([
-          FormatUtils.formatDate(new Date().toJSON(), true), currentValue, hourlyMax, tenDayMax, tenDayStdDev, threshold, tenDayMin, tenDayAvg
+          FormatUtils.formatDate(new Date().toJSON(), true), currentValue, hourlyMax,  tenDayAvg, tenDayStdDev, threshold
         ]);
       }
       const googleData = google.visualization.arrayToDataTable(data);
 
       const options = {
         title: 'conus',
-        curveType: 'function',
+        // curveType: 'function',
         legend: { position: 'bottom' }
       };
 
