@@ -14,10 +14,10 @@ class EventFeaturesService extends BaseService {
    *
    * @returns {Promise}
    */
-  async get(event) {
+  async get(event, timestamp) {
     // get the geojson file with by requesting ie https://data.casita.library.ucdavis.edu/west/thermal-anomaly/2022-08-24/16/06-17/7/b6/34-features.json
     // the path being /[satellite]/thermal-anomaly/[date]/[hour]/[min-sec]/[band]/[apid]/[event-id]-features.json
-    const dateTime = event.payload.timestamps[1][0];
+    const dateTime = timestamp;
     const date = dateTime.split('T')[0];
     const time = dateTime.split('T')[1];
     const hour = time.substr(0, 2);
@@ -34,11 +34,11 @@ class EventFeaturesService extends BaseService {
       // if the state is 'loading' and another request for this object
       // comes in, both requests will wait on the same promise preventing
       // two network requests for the same objects
-      checkCached : () => this.store.data.byEventId[event.id],
+      checkCached : () => this.store.data.byEventIdTimestamp[event.id+'/'+timestamp],
       // request is a promise to resolves when network request finished (success or failure)
-      onLoading : request => this.store.setEventFeaturesLoading(event.id, request),
-      onLoad : result => this.store.setEventFeaturesLoaded(event.id, result.body),
-      onError : e => this.store.setEventFeaturesError(event.id, e)
+      onLoading : request => this.store.setEventFeaturesLoading(event.id, timestamp, request),
+      onLoad : result => this.store.setEventFeaturesLoaded(event.id, timestamp, result.body),
+      onError : e => this.store.setEventFeaturesError(event.id, timestamp, e)
     });
   }
 

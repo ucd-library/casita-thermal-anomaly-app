@@ -6,8 +6,6 @@ export default class GoogleChart extends Mixin(LitElement)
 
   static get properties() {
     return {
-      eventId: {type: Number},
-      eventDetail: {type: Object},
       eventfeatures: {type: Array},
     }
   }
@@ -18,12 +16,7 @@ export default class GoogleChart extends Mixin(LitElement)
 
   constructor() {
     super();
-
-    this._injectModel('EventDetailModel', 'EventFeaturesModel');
-    this.eventDetail = {};
     this.eventFeatures = [];
-    this.eventId = 0;
-
     this.render = render.bind(this);
   }
 
@@ -38,13 +31,10 @@ export default class GoogleChart extends Mixin(LitElement)
    * 
    * @param {Object} props 
    */
-  async updated(props) {
+  updated(props) {
     if( this.eventFeatures.length > 0 ) {
       this._drawChart();
-    } else if( this.eventDetail && Object.keys(this.eventDetail).length > 0 ) {
-      this.eventId = this.eventDetail.id;
-      await this.EventFeaturesModel.get(this.eventDetail);
-    } 
+    }
   }
 
   /**
@@ -89,7 +79,7 @@ export default class GoogleChart extends Mixin(LitElement)
         let hist = currentTime.toISOString();
 
         const dateTime = FormatUtils.formatDate(hist, true); // key 'hist' is a datetime string
-        if( dateTime == '8/27@06' ) debugger;
+        // if( dateTime == '8/27@06' ) debugger;
         const histValues = pixelData.properties.history[hist] || {};
         hourlyMax = histValues['hourly-max'] || null;
         tenDayMax = histValues['10d-max'] || null;
@@ -125,22 +115,14 @@ export default class GoogleChart extends Mixin(LitElement)
         legend: { position: 'bottom' }
       };
 
-      const chart = new google.visualization.LineChart(this.shadowRoot.querySelector('#chart'));
+      if( !this.chart ) {
+        this.chart = new google.visualization.LineChart(this.shadowRoot.querySelector('#chart'));
+      }
 
-      chart.draw(googleData, options);
+      this.chart.draw(googleData, options);
     }    
   }
 
-  /**
-   * @method _onUpdateEventFeatures
-   * @description bound to EventFeaturesService update-event-features event
-   *
-   * @param {Object} e
-   */
-  async _onUpdateEventFeatures(e) {
-    this.eventFeatures = e.byEventId[this.eventId].payload.features;
-    this.requestUpdate();
-  }
 }
 
 customElements.define('google-chart', GoogleChart);

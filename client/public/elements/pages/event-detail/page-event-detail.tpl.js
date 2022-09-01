@@ -24,7 +24,7 @@ return html`
   ${this.eventId && this.eventId > 0 ? html`<h2>Event ${this.eventId}</h2>` : ''}
 
   <div class="l-container" style="margin-bottom: 2rem; position: relative; clear: both;">
-    <slider-control .eventDetail=${this.eventDetail}></slider-control>
+    <slider-control .eventId=${this.eventId} .eventDetail=${this.eventDetail} @refresh-chart="${(e) => { this._onRefreshChart(e) }}"></slider-control>
   </div>
 
   <div class="l-container">
@@ -55,7 +55,7 @@ return html`
   </div>
   
   <div class="l-container" style="margin-bottom: 2rem; position: relative; clear: both;">
-    <google-chart .eventDetail=${this.eventDetail}></google-chart>
+    <google-chart .eventFeatures=${this.eventFeatures}></google-chart>
   </div>
   
   

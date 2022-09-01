@@ -10,7 +10,8 @@ export default class PageEventDetail extends Mixin(LitElement)
     return {
       eventId: {type: Number},
       eventDetail: {type: Object},
-      eventImages: {type: Object}
+      eventImages: {type: Object},
+      eventFeatures: {type: Array}
     }
   }
 
@@ -24,6 +25,7 @@ export default class PageEventDetail extends Mixin(LitElement)
     this._injectModel('EventDetailModel', 'EventFeaturesModel');
     this.eventDetail = {};
     this.eventId = 0;
+    this.eventFeatures = [];
     this.render = render.bind(this);
     this.eventImages = {};
   }
@@ -62,6 +64,28 @@ export default class PageEventDetail extends Mixin(LitElement)
         });
       });
     }, 3000);
+  }
+
+  /**
+   * @method _onUpdateEventFeatures
+   * @description bound to EventFeaturesService update-event-features event
+   *
+   * @param {Object} e
+   */
+  async _onUpdateEventFeatures(e) {
+    this.eventFeatures = e.byEventIdTimestamp[this.eventId+'/'+this.eventDetail.payload.timestamps[1][0]].payload.features;
+    // this.requestUpdate();
+  }
+
+  async _onRefreshChart(e) {
+    debugger;
+    const features = await this.EventFeaturesModel.get(this.eventDetail, e.detail.timestamp);
+    this.eventFeatures = features.payload.features;
+
+    const chart = this.shadowRoot.querySelector('google-chart');
+    chart.eventFeatures = features.payload.features;
+    chart._drawChart(true);
+
   }
 
 }

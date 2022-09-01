@@ -6,7 +6,7 @@ class EventFeaturesStore extends BaseStore {
     super();
 
     this.data = {
-      byEventId: {},
+      byEventIdTimestamp: {},
     };
 
     this.events = {
@@ -15,16 +15,16 @@ class EventFeaturesStore extends BaseStore {
   }
 
   // promise is the request promise
-  setEventFeaturesLoading(id, request) {
-    this._updateEventFeatures({state: this.STATE.LOADING, id, request });
+  setEventFeaturesLoading(id, timestamp, request) {
+    this._updateEventFeatures({state: this.STATE.LOADING, id, timestamp,request });
   }
 
-  setEventFeaturesLoaded(id, payload) {
-    this._updateEventFeatures({state: this.STATE.LOADED, id, payload });
+  setEventFeaturesLoaded(id, timestamp, payload) {
+    this._updateEventFeatures({state: this.STATE.LOADED, id, timestamp, payload });
   }
 
-  setEventFeaturesError(err) {
-    this._updateEventFeatures({state: this.STATE.ERROR, error: err});
+  setEventFeaturesError(id, timestamp, err) {
+    this._updateEventFeatures({state: this.STATE.ERROR, id, timestamp, error: err});
   }
   
   // set data state and fire event if LOADED
@@ -32,7 +32,7 @@ class EventFeaturesStore extends BaseStore {
     // new state is same as old state, just quit out
     if( !this.stateChanged(this.data, data) ) return;
 
-    this.data.byEventId[data.id] = data;
+    this.data.byEventIdTimestamp[data.id+'/'+data.timestamp] = data;
     if (data && data.payload) {
       this.emit(this.events.UPDATE_EVENT_FEATURES, this.data);
     }
