@@ -23,6 +23,10 @@ export function render() {
 return html`
   ${this.eventId && this.eventId > 0 ? html`<h2>Event ${this.eventId}</h2>` : ''}
 
+  <div class="l-container" style="margin-bottom: 2rem; position: relative; clear: both;">
+    <slider-control .eventDetail=${this.eventDetail}></slider-control>
+  </div>
+
   <div class="l-container">
     <div class="l-sibling-grid--half panel o-box">    
     ${this.eventDetail && this.eventDetail.payload ? html`
@@ -53,4 +57,8 @@ return html`
   <div class="l-container" style="margin-bottom: 2rem; position: relative; clear: both;">
     <google-chart .eventDetail=${this.eventDetail}></google-chart>
   </div>
+  
+  
+  
+
 `;}
