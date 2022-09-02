@@ -34,7 +34,7 @@ async function loadLatestSecret(name) {
 async function setupWebpush() {
   if( !config.publicVapidKey ) {
     let vapidKey = JSON.parse(await loadLatestSecret('thermal-anomaly-app-vapid-key'));
-    fs.writeFileSync(path.join(__dirname, 'vapidKeys.json'), vapidKey);
+    fs.writeFileSync(path.join(__dirname, 'vapidKeys.json'), JSON.stringify(vapidKey));
     config.publicVapidKey = vapidKey.publicKey;
     config.privateVapidKey = vapidKey.privateKey;
   }

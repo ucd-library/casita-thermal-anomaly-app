@@ -34,7 +34,7 @@ class EventDetailStore extends BaseStore {
 
     this.data.byEventId[data.id] = data;
     if (data && data.payload) {
-      this.emit(this.events.UPDATE_EVENT_DETAIL, this.data);
+      this.emit(this.events.UPDATE_EVENT_DETAIL, data);
     }
   }
 

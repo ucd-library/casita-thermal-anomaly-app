@@ -49,7 +49,7 @@ export default class PageEventDetail extends Mixin(LitElement)
    * @param {Object} e
    */
   async _onUpdateEventDetail(e) {
-    this.eventDetail = Object.values(e.byEventId)[0];
+    this.eventDetail = e;
     this.eventImages = imageUtils.getProductUrlsFromEvent(this.eventDetail.payload);
   
     let features = await this.EventFeaturesModel.get(this.eventDetail);
@@ -78,7 +78,6 @@ export default class PageEventDetail extends Mixin(LitElement)
   }
 
   async _onRefreshChart(e) {
-    debugger;
     const features = await this.EventFeaturesModel.get(this.eventDetail, e.detail.timestamp);
     this.eventFeatures = features.payload.features;
 

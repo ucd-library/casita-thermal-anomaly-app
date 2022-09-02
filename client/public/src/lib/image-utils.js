@@ -9,7 +9,7 @@ class ImageUtils {
   getProductUrlsFromEvent(event) {
     let products = {};
     config.image.products.forEach(product => {
-      let priorHour = new Date(new Date(event.created).getTime() - (1000 * 60 * 60 *2));
+      let priorHour = new Date(new Date(event.created).getTime() - (1000 * 60 * 60));
       let hour = priorHour.getUTCHours()+'';
       if( hour.length === 1 ) hour = '0'+hour; 
 

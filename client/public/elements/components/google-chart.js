@@ -79,7 +79,6 @@ export default class GoogleChart extends Mixin(LitElement)
         let hist = currentTime.toISOString();
 
         const dateTime = FormatUtils.formatDate(hist, true); // key 'hist' is a datetime string
-        // if( dateTime == '8/27@06' ) debugger;
         const histValues = pixelData.properties.history[hist] || {};
         hourlyMax = histValues['hourly-max'] || null;
         tenDayMax = histValues['10d-max'] || null;
@@ -91,7 +90,6 @@ export default class GoogleChart extends Mixin(LitElement)
         } 
         threshold = Number(tenDayAvg) + (Number(tenDayStdDev) * pixelData.properties.classifier);
 
-        console.log(hist, dateTime, currentValue, hourlyMax, tenDayAvg, tenDayStdDev, threshold);
         data.push([
           dateTime, currentValue, hourlyMax, tenDayAvg, tenDayStdDev, threshold
         ]);
