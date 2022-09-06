@@ -1,8 +1,8 @@
-const express = require('express');
-const webPush = require('./web-push.js');
+import express from 'express';
+import webPush from './web-push.js';
 
 const router = express.Router();
 
 router.use('/web-push', webPush);
 
-module.exports = router;
+export default router;

@@ -1,5 +1,5 @@
-const {AppStateModel} = require('@ucd-lib/cork-app-state');
-const AppStateStore = require('../stores/AppStateStore');
+import {AppStateModel} from '@ucd-lib/cork-app-state';
+import AppStateStore from '../stores/AppStateStore.js';
 
 class AppStateModelImpl extends AppStateModel {
 
@@ -39,4 +39,4 @@ class AppStateModelImpl extends AppStateModel {
 
 }
 
-module.exports = new AppStateModelImpl();
+export default new AppStateModelImpl();

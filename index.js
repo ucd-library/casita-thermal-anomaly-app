@@ -1,18 +1,24 @@
-require('dotenv').config({ path: '.env' });
-const express = require('express');
-const path = require('path');
-const webPush = require('web-push');
-const bodyParser = require('body-parser');
-const controllers = require('./controllers/index.js');
-const config = require('./lib/config');
-const fs = require('fs');
-const {SecretManagerServiceClient} = require('@google-cloud/secret-manager');
+import dotenv from 'dotenv';
+import express from 'express';
+import path from 'path';
+import webPush from 'web-push';
+import bodyParser from 'body-parser';
+import controllers from './controllers/index.js';
+import staticController from './controllers/static.js';
+import config from './lib/config.js';
+import fs from 'fs';
+import {SecretManagerServiceClient} from '@google-cloud/secret-manager';
+import { fileURLToPath } from 'url';
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const app = express();
-let secretClient;
+dotenv.config({ path: '.env' });
 
 // setup static routes
-require('./controllers/static')(app);
+// app.use(staticController);
+staticController(app);
+
+let secretClient;
 
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'client')));
@@ -29,7 +35,6 @@ async function loadLatestSecret(name) {
   });
   return resp[0].payload.data.toString('utf-8');
 }
-
 
 async function setupWebpush() {
   if( !config.publicVapidKey ) {

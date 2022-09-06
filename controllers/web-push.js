@@ -1,4 +1,4 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
 
 // based on https://pusher.com/tutorials/push-notifications-node-service-workers/ and https://web.dev/notifications/
@@ -22,4 +22,4 @@ router.post('/subscribe', async (req, res) => {
     });
 });
 
-module.exports = router;
+export default router;

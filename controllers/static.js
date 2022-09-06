@@ -1,9 +1,12 @@
-const path = require('path');
-const fs = require('fs');
-const spaMiddleware = require('@ucd-lib/spa-router-middleware');
-const config = require('../lib/config');
+import path from 'path';
+import fs from 'fs';
+import spaMiddleware from '@ucd-lib/spa-router-middleware';
+import config from '../lib/config.js';
+import { fileURLToPath } from 'url';
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-module.exports = (app) => {
+
+export default (app) => {
   // path to your spa assets dir
   let assetsDir = path.join(__dirname, '..', 'client', config.client.dir);
   console.log('Serving client env ('+config.client.env+') code from: '+assetsDir);

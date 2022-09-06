@@ -5,11 +5,12 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "cd client && webpack --config webpack-watch.config.js --watch",
+    "watch": "cd client && webpack --config webpack-watch.config.cjs --watch",
     "dist": "cd client && ./dist.sh",
     "dev": "nodemon index.js",
     "generate-keys": "if [[ ! -f vapidKeys.json ]]; then npx web-push generate-vapid-keys --json > vapidKeys.json; fi"
   },
+  "type": "module",
   "author": "",
   "license": "ISC",
   "dependencies": {
