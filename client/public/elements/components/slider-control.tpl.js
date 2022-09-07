@@ -76,6 +76,23 @@ export function styles() {
       background: black;
     }
 
+    .tooltip-text {
+      visibility: hidden;
+      width: 120px;
+      border: 2px solid black;
+      background-color: white;
+      text-align: center;
+      padding: 5px 0;
+      border-radius: 6px;
+      position: absolute;
+      z-index: 1;
+      top: 1.5em;
+    }
+
+    .event:hover .tooltip-text {
+      visibility: visible;
+    }
+
   `;
 
   return [
@@ -158,6 +175,7 @@ return html`
                   data-timestamp=${ts.timestamp}
                   data-tooltip="${ts.formattedHoursMins} - ${ts.value}"
                   @click=${this._sliderClicked}>
+                  <span class="tooltip-text">${ts.formattedHoursMins} - ${ts.value}</span>
                 </span>`}
             `)}
           </div>
