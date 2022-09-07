@@ -6,6 +6,7 @@ export function styles() {
   const elementStyles = css`
     :host {
       display: block;
+      padding-bottom: 15vh;
     }
     
     hr {

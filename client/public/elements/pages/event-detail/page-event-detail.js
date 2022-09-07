@@ -78,14 +78,12 @@ export default class PageEventDetail extends Mixin(LitElement)
   }
 
   async _onRefreshChart(e) {
-    debugger;
     const features = await this.EventFeaturesModel.get(this.eventDetail, e.detail.timestamp);
     this.eventFeatures = features.payload.features;
 
     const chart = this.shadowRoot.querySelector('google-chart');
     chart.eventFeatures = features.payload.features;
     chart._drawChart(true);
-
   }
 
 }
