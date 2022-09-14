@@ -1,6 +1,13 @@
 import { LitElement } from 'lit';
 import {render, styles} from "./leaf-map.tpl.js";
-import {Proj} from 'proj4leaflet';
+// import {Proj} from 'proj4leaflet';
+
+import proj4 from 'proj4';
+console.log(proj4)
+
+const EPSG3310 = "+proj=aea +lat_1=34 +lat_2=40.5 +lat_0=0 +lon_0=-120 +x_0=0 +y_0=-4000000 +ellps=GRS80 +datum=NAD83 +units=m +no_defs";
+const EPSG3857 = "+proj=merc +a=6378137 +b=6378137 +lat_ts=0 +lon_0=0 +x_0=0 +y_0=0 +k=1 +units=m +nadgrids=@null +wktext +no_defs +type=crs";
+
 export default class LeafMap extends Mixin(LitElement)
   .with(LitCorkUtils) {
 
@@ -24,7 +31,10 @@ export default class LeafMap extends Mixin(LitElement)
 
   connectedCallback() {
     super.connectedCallback();
-    this._initMap();
+    requestAnimationFrame(() => {
+      this._initMap();
+    })
+    
   }
 
   /**
@@ -87,37 +97,36 @@ export default class LeafMap extends Mixin(LitElement)
     this.shadowRoot.appendChild(mapdiv);
     
     // let crs = L.CRS.proj4js('EPSG:3310', '+proj=aea +lat_0=0 +lon_0=-120 +lat_1=34 +lat_2=40.5 +x_0=0 +y_0=-4000000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs', new L.Transformation(0.5 / (Math.PI * L.Projection.Mercator.R_MAJOR), 0.5, -0.5 / (Math.PI * L.Projection.Mercator.R_MINOR), 0.5));
-    const crs = new L.Proj.CRS('EPSG:3310', 
-      '+proj=aea ' + 
-      '+lat_0=0 ' +  
-      '+lon_0=-120 ' +  
-      '+lat_1=34 ' +  
-      '+lat_2=40.5 ' +  
-      '+x_0=0 ' +
-      '+y_0=-4000000 ' +  
-      '+ellps=GRS80 ' + 
-      '+towgs84=0,0,0,0,0,0,0 ' + 
-      '+units=m ' +  
-      '+no_defs ',
-      {
-        resolutions: [8192, 4096, 2048], // zoom level resolutions
-        origin: [0, 0]
-      },
-      // new L.Transformation(0.5 / (Math.PI * L.Projection.Mercator.R_MAJOR), 0.5, -0.5 / (Math.PI * L.Projection.Mercator.R_MINOR), 0.5)
-    );
-    const map = L.map(mapdiv, { center: new L.LatLng(57.74, 11.94), crs });
-
-    map.setView([57.74, 11.94], 13);
+    // const crs = new L.Proj.CRS('EPSG:3310', 
+    //   '+proj=aea ' + 
+    //   '+lat_0=0 ' +  
+    //   '+lon_0=-120 ' +  
+    //   '+lat_1=34 ' +  
+    //   '+lat_2=40.5 ' +  
+    //   '+x_0=0 ' +
+    //   '+y_0=-4000000 ' +  
+    //   '+ellps=GRS80 ' + 
+    //   '+towgs84=0,0,0,0,0,0,0 ' + 
+    //   '+units=m ' +  
+    //   '+no_defs ',
+    //   {
+    //     resolutions: [8192, 4096, 2048], // zoom level resolutions
+    //     origin: [0, 0]
+    //   },
+    //   // new L.Transformation(0.5 / (Math.PI * L.Projection.Mercator.R_MAJOR), 0.5, -0.5 / (Math.PI * L.Projection.Mercator.R_MINOR), 0.5)
+    // );
+    const map = L.map(mapdiv, { center: new L.LatLng(36, -121) });
+    map.setView([36, -121],4);
     // map.setView([37.8, -96], 4);
     this.map = map;
 
-    const mapLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution: '&copy; OpenStreetMap'
-    });
-    if( !map.hasLayer(mapLayer) ) {
-      map.addLayer(mapLayer);
-    }
+    }).addTo(map);
+    // if( !map.hasLayer(mapLayer) ) {
+    //   map.addLayer(mapLayer);
+    // }
 
     map.whenReady(() => {
       setTimeout(() => {
@@ -127,13 +136,22 @@ export default class LeafMap extends Mixin(LitElement)
 
     // image overlay (https://leafletjs.com/examples/overlays/)
     // const imageUrl = 'https://data.casita.library.ucdavis.edu/west/thermal-anomaly/2022-08-24/22/00-00/7/b6/blocks/1666-213/hourly-max-10d-stddev.png';
-    const imageUrl = 'https://data.casita.library.ucdavis.edu/west/california/2022-09-13/16/16-17/2/imagery/image.png';
+    const imageUrl = 'https://data.casita.library.ucdavis.edu/west/california/2022-09-14/18/06-17/7/imagery/image.png';
     const errorOverlayUrl = 'https://cdn-icons-png.flaticon.com/512/110/110686.png';
     const altText = 'Image of something.';
-    const latLngBounds = L.latLngBounds([[38.441,-121.670], [38.642,-121.871]]);
+
+    let bl = proj4(EPSG3310).inverse([-410000, -660000]);
+    let tr = proj4(EPSG3310).inverse([610000, 460000]);
+    // let bl = proj4(EPSG3310).inverse([-660000, -410000]);
+    // let tr = proj4(EPSG3310).inverse([460000, 610000]);
+    console.log(bl, tr);
+    console.log([bl[1], bl[0]],  [tr[1], tr[0]]);
+
+
+    const latLngBounds = L.latLngBounds([bl[1], bl[0]],  [tr[1], tr[0]]);
 
     const imageOverlay = L.imageOverlay(imageUrl, latLngBounds, {
-        opacity: 0.9,
+        opacity: 0.5,
         errorOverlayUrl: errorOverlayUrl,
         alt: altText,
         interactive: true
@@ -141,7 +159,7 @@ export default class LeafMap extends Mixin(LitElement)
     this.imageOverlay = imageOverlay;
 
     
-    L.rectangle(latLngBounds).addTo(map);
+    // L.rectangle(latLngBounds).addTo(map);
     // map.fitBounds(latLngBounds);
 
 
